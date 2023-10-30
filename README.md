@@ -1,27 +1,37 @@
-# React + TypeScript + Vite
+# Rolling dice game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. dice display : The application displays the dice and their current value.
+2. Rolling dice: Users can roll the dice to obtain a new value.
+value.
+3. Calculate score: The game automatically calculates the player's score based on the
+dice values.
+4. Turn management: The game allows you to manage players' turns, alternating between
+players after each throw.
+5. Winner display: The game displays the winning player with the highest score.
+6. Reset game: Users can reset the game to start a new game.
+a new game.
 
-Currently, two official plugins are available:
+## Stack
+React + TypeScript + Vite + Tailwind 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Why I choose vite over CRA ?
+- faster spin-up of dev server
+- less waiting time for file updates
+- improve build performance
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- step 1: install package
+- step 2: ```npm run dev``` or ```bun dev``` or ```yarn dev``` to launch locally
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+## 📑 Improvement:
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Make rolling asynchronous ***
+- Type improvement (with zod) and complete missing
+- Using specific algorithm for dice rolling, actually the first player have more chance to gain
+- shuffle player to trough first
+- Add posibilities to play against the computer (using algorithm like minmax, alpha beta, ...)
+- Improve Dice UI
+- Improve UI & UX
+- setup linter
