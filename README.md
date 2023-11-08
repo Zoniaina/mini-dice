@@ -14,7 +14,7 @@ a new game.
 ## Stack
 React + TypeScript + Vite + Tailwind 
 
-Why I choose vite over CRA ?
+Why I choose ``vite`` over ``CRA`` ?
 - faster spin-up of dev server
 - less waiting time for file updates
 - improve build performance
@@ -28,10 +28,9 @@ Why I choose vite over CRA ?
 ## 📑 Improvement:
 
 - Make rolling asynchronous ***
-- Type improvement (with zod) and complete missing
+- Type improvement (with zod) and complete missing type
 - Using specific algorithm for dice rolling, actually the first player have more chance to gain
 - shuffle player to trough first
-- Add posibilities to play against the computer (using algorithm like minmax, alpha beta, ...)
-- Improve Dice UI
+- Add posibilities to play against the computer
 - Improve UI & UX
 - setup linter
