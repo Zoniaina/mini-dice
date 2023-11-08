@@ -1,85 +1,93 @@
-import { createContext, useMemo, useState } from 'react';
+import { createContext, useState } from 'react';
+import { PlayerSchema, GameContextType, Player } from '../types/player';
+import randomFace from '../utils/random';
 
-type Player = {
-  id: string;
-  name: string;
-  score: number;
-};
+export const GameContext = createContext<GameContextType | undefined>(
+  undefined
+);
 
-//TODO:update type
-// type GameType = {
-//   players: Array<Player>;
-//   setPlayers: () => void;
-// };
-
-const initValue = {
-  players: [],
-  setPlayers: () => undefined,
-  setCurrentPlayer: (value: number) => undefined,
-  currentPlayer: null,
-  getPlayerTurn: undefined,
-  rollingCount: 0,
-  setRollingCount: () => undefined,
-  winnerIndex: 0,
-  resetScore: () => undefined,
-  reinitGame: () => undefined,
-};
-
-export const GameContext = createContext(initValue);
-
-const GameProvider = ({ children }: { children: React.ReactNode }) => {
+const GameProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [players, setPlayers] = useState<Player[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<number>(0);
-  const [rollingCount, setRollingCount] = useState(0);
+  const [currentTurn, setCurrentTurn] = useState(0);
+  const [dice1, setDice1] = useState(0);
+  const [dice2, setDice2] = useState(0);
 
-  const getPlayerTurn = () => {
-    if (players.length <= 0) return;
-    if (currentPlayer < players.length - 1) {
-      setCurrentPlayer((prev) => prev + 1);
-      return;
-    }
-    setCurrentPlayer(0);
+  const addPlayer = (name: string) => {
+    const newPlayer = {
+      id: players.length + 1,
+      name,
+      score: 0,
+      dice: [0, 0],
+      winner: false,
+    };
+    PlayerSchema.parse(newPlayer);
+    setPlayers([...players, newPlayer]);
   };
 
-  const reinitGame = () => {
+  const rollDice = (playerId: number) => {
+    const dice1 = randomFace();
+    const dice2 = randomFace();
+    const total = dice1 + dice2;
+    setDice1(dice1);
+    setDice2(dice2);
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player) =>
+        player.id === playerId
+          ? { ...player, score: player.score + total, dice: [dice1, dice2] }
+          : player
+      )
+    );
+
+    setWinner();
+  };
+
+  const nextTurn = () => {
+    setCurrentTurn((prevTurn) => (prevTurn + 1) % players.length);
+  };
+
+  const initGame = () => {
     setPlayers([]);
-    setRollingCount(0);
+    setCurrentTurn(0);
   };
 
-  const resetScore = () => {
-    const newScores = players.map((score) => ({ ...score, score: 0 }));
-    setPlayers(newScores);
-    setRollingCount(0);
+  const reinitScores = () => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => ({ ...player, score: 0, dice: [0, 0] }))
+    );
   };
 
-  const winnerIndex = useMemo(() => {
-    if (rollingCount && rollingCount < 2) return;
-    let maxScore = -Infinity;
-    let maxScoreIndex = -1;
+  const setWinner = () => {
+    const maxScore = Math.max(...players.map((player) => player.score));
+    const winners = players.filter((player) => player.score === maxScore);
+    if (winners.length === 1) {
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) =>
+          player.id === winners[0].id
+            ? { ...player, winner: true }
+            : { ...player, winner: false }
+        )
+      );
+    }
+  };
 
-    players.forEach((obj, index) => {
-      if (obj.score > maxScore) {
-        maxScore = obj.score;
-        maxScoreIndex = index;
-      }
-    });
-    return maxScoreIndex | 0;
-  }, [rollingCount, resetScore]);
-
-  const value = {
+  const contextValue: GameContextType = {
     players,
-    setPlayers,
-    currentPlayer,
-    setCurrentPlayer,
-    getPlayerTurn,
-    rollingCount,
-    setRollingCount,
-    winnerIndex,
-    reinitGame,
-    resetScore,
+    addPlayer,
+    rollDice,
+    currentTurn,
+    nextTurn,
+    initGame,
+    reinitScores,
+    dice1,
+    dice2,
+    winner: players.find((player) => player.winner) || null,
   };
 
-  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+  return (
+    <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
+  );
 };
 
 export default GameProvider;
