@@ -1,8 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo } from 'react';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { IconName, library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-
 import {
   faDiceOne,
   faDiceTwo,
@@ -31,14 +30,19 @@ const dice: { [key: number]: string } = {
   6: 'six',
 } as const;
 
-const Die = ({ pip }: { pip: number }) => {
-  const icon = useMemo<IconName>(() => {
-    return `fa-dice-${dice[pip]}`;
+type DieProps = { pip: number; rolling?: boolean };
+
+const Die: React.FC<DieProps> = ({ pip, rolling }) => {
+  const icon = useMemo(() => {
+    return `fa-dice-${dice[pip === 0 ? 1 : pip]}` as IconName;
   }, [pip]);
 
   return (
-    // ${rolling && 'Die-shaking'}
-    <FontAwesomeIcon icon={icon} className={`text-slate-400 w-16 h-16`} />
+    <FontAwesomeIcon
+      icon={icon}
+      className={`text-slate-400 w-16 h-16`}
+      shake={rolling}
+    />
   );
 };
 
