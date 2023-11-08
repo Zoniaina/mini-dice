@@ -39,7 +39,6 @@ const GameProvider: React.FC<{ children: React.ReactNode }> = ({
           : player
       )
     );
-
     setWinner();
   };
 
@@ -83,6 +82,7 @@ const GameProvider: React.FC<{ children: React.ReactNode }> = ({
     dice1,
     dice2,
     winner: players.find((player) => player.winner) || null,
+    findWinner: setWinner,
   };
 
   return (
