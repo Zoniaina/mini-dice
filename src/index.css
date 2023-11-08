@@ -3,4 +3,7 @@
 @tailwind utilities;
 
 @layer utilities {
+  .playing {
+    @apply py-14 px-8 bg-yellow-200 border rounded-md  border-amber-400;
+  }
 }
