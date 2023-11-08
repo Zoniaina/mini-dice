@@ -25,6 +25,7 @@ export const GameContextSchema = z.object({
   dice1: z.number().default(1),
   dice2: z.number().default(1),
   winner: PlayerSchema.nullable(),
+  findWinner: z.function().returns(z.void()),
 });
 
 export type GameContextType = z.infer<typeof GameContextSchema>;

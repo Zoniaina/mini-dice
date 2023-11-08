@@ -4,6 +4,7 @@ import Button from '../../components/ui/Button/button';
 import Player from '../../components/Player';
 import { useGame } from '../../hooks/game';
 import PlayerInput from '../../features/PlayerInput';
+import { useEffect } from 'react';
 
 const Dice = () => {
   const {
@@ -16,12 +17,22 @@ const Dice = () => {
     dice1,
     dice2,
     winner,
+    findWinner,
   } = useGame();
 
   const handleRollDice = () => {
     rollDice(players[currentTurn].id);
     nextTurn();
   };
+
+  //FIXME: find way to get winner at right time
+  useEffect(() => {
+    if (currentTurn > 0) {
+      findWinner();
+    }
+    return () => {};
+  }, [currentTurn]);
+
   const handleInitGame = () => {
     initGame();
   };
